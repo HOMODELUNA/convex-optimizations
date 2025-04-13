@@ -1,0 +1,8 @@
+*.synctex.gz
+*.xdv
+*.aux
+*.log
+*.fdb_latexmk
+*.fls
+unused/*
+/work2/work2.pdf
