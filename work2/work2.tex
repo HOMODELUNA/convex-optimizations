@@ -50,6 +50,12 @@
 
 见: https://github.com/HOMODELUNA/convex-optimizations/blob/master/work2/p1.jl
 
+输出为:
+\begin{lstlisting}
+apply(Arg, X_INIT) = 0.0
+conjugate_gradient(Arg, X_INIT) = Solution([-1.0, 1.5], -1.25)
+\end{lstlisting}
+
 \section{}
 
 写代码，用黄金分割法，斐波那契亚数列法，二分法，Shubert-Piyavskii分别求解问题:
@@ -58,7 +64,6 @@
     \item \(min f(x) = 2x_2 -x -1\), 初始区间\( [a_0,b_0] = [-1,1]\),区间精度 \(\delta = 0.06\)
     
     \item \(\min f(x)=3x_2 - 21.6x-1\), 初始区间\([a_0,b_0] = [0,25]\),区间精度\(\delta = 0.08\)
-    \item 
 \end{enumerate}
 
 见: https://github.com/HOMODELUNA/convex-optimizations/blob/master/work2/p2.jl
@@ -411,22 +416,79 @@ x_{k+1} = x_k - \alpha_k B_k^{-1} \nabla f(x_k)
 尝试采用深度学习中的随机梯度下降算法中各种一阶改进的优化算法来求解上述习题
 中的典型问题。
 
+(空)
+
 \section{}
 
 自己查看已有的深度学习模型，训练中其参数的变化是否服从低维特性？尝试画出这
 些变化的分布。
 
+(空)
 \section{}
 
 查阅一阶优化算法的最新加速算法思想，并总结其基本思路。（可查阅北大林宙辰老师
 的英文版书籍）。
 
+一阶优化算法是优化领域中的重要工具，许多新兴的加速算法思想旨在提高这些算法的收敛速度和效率。以下是一些最新的加速算法思想及其基本思路的总结。
+
+\subsection{动量方法}
+
+\textbf{基本思路}：
+动量方法通过引入“惯性”来加速梯度下降的收敛。它在每次迭代中不仅考虑当前的梯度信息，还结合了过去的梯度信息。具体公式为：
+\[
+v_t = \beta v_{t-1} + (1 - \beta) \nabla f(x_t)
+\]
+\[
+x_{t+1} = x_t - \alpha v_t
+\]
+其中，$v_t$ 是动量项，$\beta$ 是动量因子，$\alpha$ 是学习率。
+
+\subsection{Nesterov加速梯度（NAG）}
+
+\textbf{基本思路}：
+Nesterov加速梯度方法在动量方法的基础上，先预测位置再计算梯度。这个方法通过在更新位置之前使用一个“预先更新”的步骤来提高收敛速度：
+\[
+x_{t+\frac{1}{2}} = x_t - \beta v_{t-1}
+\]
+\[
+v_t = \beta v_{t-1} + \nabla f(x_{t+\frac{1}{2}})
+\]
+\[
+x_{t+1} = x_t - \alpha v_t
+\]
+
+\subsection{自适应学习率方法}
+
+\textbf{基本思路}：
+自适应学习率方法通过动态调整学习率来提高收敛效果。常见的方法包括：
+\begin{itemize}
+    \item \textbf{AdaGrad}：根据每个参数的历史梯度累积调整学习率，使得稀疏参数的学习率较高。
+    \item \textbf{RMSProp}：类似于AdaGrad，但通过移动平均来防止学习率过快衰减。
+    \item \textbf{Adam}：结合了动量和RMSProp的优点，使用一阶矩和二阶矩的估计来动态调整学习率。
+\end{itemize}
+
+\subsection{加速的随机梯度下降（SGD）}
+
+\textbf{基本思路}：
+在大规模数据集上，标准的SGD可能会收敛缓慢。加速的SGD方法引入了小批量（mini-batch）训练和动量，减少方差，提高收敛速度。具体方法包括：
+\begin{itemize}
+    \item 使用小批量样本来估计梯度。
+    \item 引入动量来加速收敛。
+\end{itemize}
+
+\subsection{矩阵方法}
+
+\textbf{基本思路}：
+使用矩阵方法（如Krylov子空间方法）来加速一阶优化算法，通过构建一个更好的搜索方向来提高收敛速度。这种方法通常涉及到计算Hessian矩阵的近似。
+
+\subsection{总结}
+
+这些加速算法的核心思想是通过引入历史信息、动态调整学习率和改进更新规则等方式，来提高一阶优化算法的收敛速度和稳定性。这些方法在深度学习、机器学习等领域得到了广泛应用，使得训练大规模模型变得更加高效。
+
 \section{}
 
 请查阅资料给出Krylov子空间方法的基本思想，并讨论子空间投影的典型应用。尝试调
 用GMRES求解典型的线性方程组，给出基本的结果。讨论GMRES方法和共轭梯度法的异同。
-
-\section{答}
 
 \subsection{Krylov子空间方法的基本思想}
 
