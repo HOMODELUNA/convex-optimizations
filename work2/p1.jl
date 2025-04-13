@@ -39,7 +39,7 @@ end
 """
 ``ϕ(x) = \\frac{1}{2} x^TAx - x^Tb``
 """
-function conjugate_gradient(args::CGArgs, x0; eps=1e-6; iter_max=100)
+function conjugate_gradient(args::CGArgs, x0; eps=1e-6, iter_max=100)
     (; A, b) = args
     grad = A * x0 - b
     p0 = -grad

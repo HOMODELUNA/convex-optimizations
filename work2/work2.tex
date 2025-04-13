@@ -202,7 +202,7 @@ davidon_flether_powell(test_f, test_g, x_0; eps = 0.03) = [-0.000343685388488557
 取初始H矩阵为单位阵，即$H_0 = I, x_0 = (0,0)^T$,做精确一维搜索。
 
 
-见:
+见: https://github.com/HOMODELUNA/convex-optimizations/blob/master/work2/p6.jl
 
 输出为:
 \begin{lstlisting}
@@ -223,6 +223,17 @@ BFGS x_min = [1.9999996028522085, 0.9999999356472791], y=-7.999999999999826
     \item BFGS 方法,$H_0 = I$;
     \item FR 共轭梯度法,$\epsilon = 10^{-6}$, 初始点可设为 $x_0 = (0,0)^T$或其他解
 \end{enumerate}
+
+\paragraph{解}
+
+见: https://github.com/HOMODELUNA/convex-optimizations/blob/master/work2/p7.jl
+
+输出为:
+\begin{lstlisting}
+davidon_flether_powell(f, grad_f, x_0) = [7.999350418639802, 5.996492112577636]
+bfgs(f, grad_f, x_0) = [7.9999993201000414, 5.999999481310278]
+conjugate_gradient(args, x_0) = Solution([8.0, 6.0], -52.0)
+\end{lstlisting}
 
 \section{}
 请证明梯度下降法和牛顿法的收敛性，并采用梯度法来迭代求解二次规划问题的收敛
@@ -414,6 +425,39 @@ x_{k+1} = x_k - \alpha_k B_k^{-1} \nabla f(x_k)
 
 请查阅资料给出Krylov子空间方法的基本思想，并讨论子空间投影的典型应用。尝试调
 用GMRES求解典型的线性方程组，给出基本的结果。讨论GMRES方法和共轭梯度法的异同。
+
+\section{答}
+
+\subsection{Krylov子空间方法的基本思想}
+
+Krylov子空间方法是一类基于Krylov子空间的迭代算法，主要用于求解线性方程组和特征值问题。对于给定的线性方程组 $Ax = b$，Krylov子空间定义为：
+\[
+\mathcal{K}_k(A, r_0) = \text{span}\{r_0, Ar_0, A^2r_0, \ldots, A^{k-1}r_0\}
+\]
+其中 $r_0 = b - Ax_0$ 是初始残差，$x_0$ 是初始猜测。Krylov子空间方法通过在这个子空间中寻找近似解，使得解的计算过程更高效，尤其在处理大规模稀疏矩阵时显得尤为重要。
+
+\subsection{子空间投影的典型应用}
+
+子空间投影方法在数值线性代数中具有广泛的应用，典型的应用包括：
+
+1. \textbf{求解线性方程组}：通过在Krylov子空间中寻找近似解，有效地解决大规模稀疏线性方程组。
+
+2. \textbf{特征值问题}：在特征值问题中，Krylov子空间可以用来构造特征值的近似，尤其在计算大矩阵的特征值时，能显著提高效率。
+
+3. \textbf{优化问题}：在某些优化算法中，Krylov子空间方法用于加速收敛，通过降低计算复杂度来提高效率。
+
+\subsection{GMRES求解线性方程组的基本结果}
+
+广义最小残量法（GMRES）是一种Krylov子空间方法，适用于求解非对称或不定矩阵的线性方程组。其基本步骤如下：
+
+1. \textbf{定义线性方程组}：设定矩阵 $A$ 和右侧向量 $b$。
+
+2. \textbf{初始化}：选择初始猜测 $x_0$ 和计算初始残差 $r_0 = b - Ax_0$。
+
+3. \textbf{迭代过程}：构造Krylov子空间，并通过正交化生成一个正交基。
+
+4. \textbf{更新解}：通过最小化残差的范数来更新解。
+
 
 \section{}
 
